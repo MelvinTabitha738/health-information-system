@@ -1,0 +1,110 @@
+<!-- templates/health/client_detail.html -->
+{% extends 'base.html' %}
+
+{% block title %}{{ client.full_name }} - Health Information System{% endblock %}
+
+{% block page_title %}Client Profile: {{ client.full_name }}{% endblock %}
+
+{% block page_actions %}
+    <div>
+        <a href="{% url 'client_update' pk=client.id %}" class="btn btn-outline-primary">
+            <i class="fas fa-edit me-1"></i>Edit
+        </a>
+        <a href="{% url 'enroll_client' client_id=client.id %}" class="btn btn-success">
+            <i class="fas fa-plus-circle me-1"></i>Enroll in Program
+        </a>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <!-- Client Information -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-user me-2"></i>Personal Information</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <strong><i class="fas fa-id-card me-2"></i>Full Name:</strong> {{ client.full_name }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong><i class="fas fa-venus-mars me-2"></i>Gender:</strong> {{ client.get_gender_display }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong><i class="fas fa-birthday-cake me-2"></i>Date of Birth:</strong> {{ client.date_of_birth|date:"M d, Y" }} ({{ client.age }} years)
+                        </li>
+                        <li class="list-group-item">
+                            <strong><i class="fas fa-phone me-2"></i>Contact Number:</strong> {{ client.contact_number }}
+                        </li>
+                        {% if client.email %}
+                        <li class="list-group-item">
+                            <strong><i class="fas fa-envelope me-2"></i>Email:</strong> {{ client.email }}
+                        </li>
+                        {% endif %}
+                        <li class="list-group-item">
+                            <strong><i class="fas fa-map-marker-alt me-2"></i>Address:</strong> {{ client.address }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong><i class="fas fa-calendar-check me-2"></i>Registration Date:</strong> {{ client.registration_date|date:"M d, Y" }}
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'client_update' pk=client.id %}" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-edit me-1"></i>Edit Information
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Program Enrollments -->
+        <div class="col-md-8 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-clipboard-list me-2"></i>Program Enrollments</h5>
+                </div>
+                <div class="card-body">
+                    {% if enrollments %}
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Program</th>
+                                        <th>Enrollment Date</th>
+                                        <th>Notes</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for enrollment in enrollments %}
+                                    <tr>
+                                        <td>{{ enrollment.program.name }}</td>
+                                        <td>{{ enrollment.enrollment_date|date:"M d, Y" }}</td>
+                                        <td>{{ enrollment.notes|default:"N/A" }}</td>
+                                        <td>
+                                            <a href="{% url 'unenroll_client' enrollment_id=enrollment.id %}" class="btn btn-sm btn-outline-danger">
+                                                <i class="fas fa-times me-1"></i>Unenroll
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>This client is not enrolled in any health programs yet.
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'enroll_client' client_id=client.id %}" class="btn btn-sm btn-success">
+                        <i class="fas fa-plus-circle me-1"></i>Enroll in Program
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

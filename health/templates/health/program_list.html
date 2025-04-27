@@ -1,0 +1,50 @@
+<!-- templates/health/program_list.html -->
+{% extends 'base.html' %}
+
+{% block title %}Health Programs - Health Information System{% endblock %}
+
+{% block page_title %}Health Programs{% endblock %}
+
+{% block page_actions %}
+    <a href="{% url 'program_create' %}" class="btn btn-primary">
+        <i class="fas fa-plus-circle me-1"></i>Add New Program
+    </a>
+{% endblock %}
+
+{% block content %}
+    {% if programs %}
+        <div class="row">
+            {% for program in programs %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">{{ program.name }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">{{ program.description }}</p>
+                            <p class="text-muted small">
+                                <i class="fas fa-calendar-alt me-1"></i>Created: {{ program.created_at|date:"M d, Y" }}
+                                <br>
+                                <i class="fas fa-clock me-1"></i>Updated: {{ program.updated_at|date:"M d, Y" }}
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{% url 'program_update' pk=program.id %}" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-edit me-1"></i>Edit
+                            </a>
+                            <a href="{% url 'program_delete' pk=program.id %}" class="btn btn-sm btn-outline-danger">
+                                <i class="fas fa-trash me-1"></i>Delete
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>No health programs created yet.
+            <a href="{% url 'program_create' %}" class="alert-link">Click here</a> to add your first program.
+        </div>
+    {% endif %}
+{% endblock %}
+

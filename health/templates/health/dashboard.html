@@ -1,0 +1,163 @@
+<!-- templates/health/dashboard.html -->
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Health Information System{% endblock %}
+
+{% block page_title %}Dashboard{% endblock %};[.]
+
+{% block content %}
+<div class="row mb-4">
+    <!-- Statistics Cards -->
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-primary h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="mr-3">
+                        <i class="fas fa-users fa-3x"></i>
+                    </div>
+                    <div class="ms-3">
+                        <h5 class="card-title">Total Clients</h5>
+                        <h2 class="card-text">{{ total_clients }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a class="text-white" href="{% url 'client_list' %}">View Details</a>
+                <i class="fas fa-angle-right text-white"></i>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-success h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="mr-3">
+                        <i class="fas fa-file-medical fa-3x"></i>
+                    </div>
+                    <div class="ms-3">
+                        <h5 class="card-title">Health Programs</h5>
+                        <h2 class="card-text">{{ total_programs }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a class="text-white" href="{% url 'program_list' %}">View Details</a>
+                <i class="fas fa-angle-right text-white"></i>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-warning h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="mr-3">
+                        <i class="fas fa-clipboard-list fa-3x"></i>
+                    </div>
+                    <div class="ms-3">
+                     
+                     <h5 class="card-title">Program Enrollments</h5>
+                     <h2 class="card-text">{{ total_enrollments }}</h2>
+                 </div>
+             </div>
+         </div>
+         <div class="card-footer d-flex align-items-center justify-content-between">
+             <a class="text-white" href="{% url 'client_list' %}">View Details</a>
+             <i class="fas fa-angle-right text-white"></i>
+         </div>
+     </div>
+ </div>
+</div>
+
+<div class="row">
+ <!-- Recent Clients -->
+ <div class="col-md-6 mb-4">
+     <div class="card h-100">
+         <div class="card-header bg-info text-white">
+             <h5 class="mb-0"><i class="fas fa-user-clock me-2"></i>Recently Registered Clients</h5>
+         </div>
+         <div class="card-body">
+             {% if recent_clients %}
+                 <div class="table-responsive">
+                     <table class="table table-hover">
+                         <thead>
+                             <tr>
+                                 <th>Name</th>
+                                 <th>Contact</th>
+                                 <th>Registered</th>
+                                 <th>Actions</th>
+                             </tr>
+                         </thead>
+                         <tbody>
+                             {% for client in recent_clients %}
+                             <tr>
+                                 <td>{{ client.full_name }}</td>
+                                 <td>{{ client.contact_number }}</td>
+                                 <td>{{ client.registration_date|date:"M d, Y" }}</td>
+                                 <td>
+                                     <a href="{% url 'client_detail' pk=client.id %}" class="btn btn-sm btn-outline-primary">
+                                         <i class="fas fa-eye"></i>
+                                     </a>
+                                 </td>
+                             </tr>
+                             {% endfor %}
+                         </tbody>
+                     </table>
+                 </div>
+             {% else %}
+                 <p class="text-muted">No clients registered yet.</p>
+             {% endif %}
+         </div>
+         <div class="card-footer">
+             <a href="{% url 'client_list' %}" class="btn btn-sm btn-outline-info">View All Clients</a>
+             <a href="{% url 'client_create' %}" class="btn btn-sm btn-outline-success">Register New Client</a>
+         </div>
+     </div>
+ </div>
+ 
+ <!-- Recent Enrollments -->
+ <div class="col-md-6 mb-4">
+     <div class="card h-100">
+         <div class="card-header bg-success text-white">
+             <h5 class="mb-0"><i class="fas fa-clipboard-check me-2"></i>Recent Program Enrollments</h5>
+         </div>
+         <div class="card-body">
+             {% if recent_enrollments %}
+                 <div class="table-responsive">
+                     <table class="table table-hover">
+                         <thead>
+                             <tr>
+                                 <th>Client</th>
+                                 <th>Program</th>
+                                 <th>Enrolled On</th>
+                                 <th>Actions</th>
+                             </tr>
+                         </thead>
+                         <tbody>
+                             {% for enrollment in recent_enrollments %}
+                             <tr>
+                                 <td>{{ enrollment.client.full_name }}</td>
+                                 <td>{{ enrollment.program.name }}</td>
+                                 <td>{{ enrollment.enrollment_date|date:"M d, Y" }}</td>
+                                 <td>
+                                     <a href="{% url 'client_detail' pk=enrollment.client.id %}" class="btn btn-sm btn-outline-primary">
+                                         <i class="fas fa-eye"></i>
+                                     </a>
+                                 </td>
+                             </tr>
+                             {% endfor %}
+                         </tbody>
+                     </table>
+                 </div>
+             {% else %}
+                 <p class="text-muted">No program enrollments yet.</p>
+             {% endif %}
+         </div>
+         <div class="card-footer">
+             <a href="{% url 'client_list' %}" class="btn btn-sm btn-outline-success">Manage Enrollments</a>
+         </div>
+     </div>
+ </div>
+</div>
+{% endblock %}   

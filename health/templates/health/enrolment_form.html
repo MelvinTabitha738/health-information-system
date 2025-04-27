@@ -1,0 +1,64 @@
+<!-- templates/health/enrollment_form.html -->
+{% extends 'base.html' %}
+
+{% block title %}Enroll Client in Program - Health Information System{% endblock %}
+
+{% block page_title %}Enroll {{ client.full_name }} in Program{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-clipboard-check me-2"></i>Program Enrollment Form</h5>
+                </div>
+                <div class="card-body">
+                    {% if form.fields.program.queryset.exists %}
+                        <form method="post">
+                            {% csrf_token %}
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.program.id_for_label }}" class="form-label">Select Program</label>
+                                {{ form.program.errors }}
+                                <select name="{{ form.program.name }}" id="{{ form.program.id_for_label }}" class="form-select" required>
+                                    <option value="">Select a program</option>
+                                    {% for program_choice in form.fields.program.queryset %}
+                                        <option value="{{ program_choice.id }}">{{ program_choice.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.notes.id_for_label }}" class="form-label">Notes (Optional)</label>
+                                {{ form.notes.errors }}
+                                <textarea name="{{ form.notes.name }}" id="{{ form.notes.id_for_label }}" class="form-control" rows="3">{{ form.notes.value|default:'' }}</textarea>
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="{% url 'client_detail' pk=client.id %}" class="btn btn-secondary me-md-2">
+                                    <i class="fas fa-arrow-left me-1"></i>Cancel
+                                </a>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-plus-circle me-1"></i>Enroll
+                                </button>
+                            </div>
+                        </form>
+                    {% else %}
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-circle me-2"></i>This client is already enrolled in all available programs or no programs have been created yet.
+                        </div>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'client_detail' pk=client.id %}" class="btn btn-secondary me-md-2">
+                                <i class="fas fa-arrow-left me-1"></i>Back to Client Profile
+                            </a>
+                            <a href="{% url 'program_create' %}" class="btn btn-primary">
+                                <i class="fas fa-plus-circle me-1"></i>Create New Program
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

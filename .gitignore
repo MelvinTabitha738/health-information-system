@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pdb
+
+# Environment
+.env
+venv/
+env/
+
+# Django specific
+*.sqlite3
+db.sqlite3
+media/
+staticfiles/
+static_root/
+static/
+
+# Migrations (optional: some prefer tracking them)
+**/migrations/*.pyc
+**/migrations/*.pyo
+**/migrations/*.pyd
+**/migrations/__pycache__/
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS generated
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Coverage and test reports
+htmlcov/
+.coverage
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+pytest_cache/
+
+# Backup files
+*.bak
+*.swp
+*.tmp
